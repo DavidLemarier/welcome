@@ -1,6 +1,6 @@
 {
   "name": "welcome",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Welcome users to Soldat with useful information",
   "main": "./lib/main",
   "soldatTestRunner": "soldat-mocha-test-runner",
