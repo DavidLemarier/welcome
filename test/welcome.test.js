@@ -10,21 +10,21 @@ describe('Welcome', () => {
 
   beforeEach(() => {
     welcomePackage = new WelcomePackage()
-    atom.config.set('welcome.showOnStartup', true)
+    soldat.config.set('welcome.showOnStartup', true)
   })
 
   afterEach(() => {
-    atom.reset()
+    soldat.reset()
   })
 
   describe("when `core.telemetryConsent` is 'undecided'", () => {
     beforeEach(async () => {
-      atom.config.set('core.telemetryConsent', 'undecided')
+      soldat.config.set('core.telemetryConsent', 'undecided')
       await welcomePackage.activate()
     })
 
     it('opens the telemetry consent pane and the welcome panes', () => {
-      const panes = atom.workspace.getCenter().getPanes()
+      const panes = soldat.workspace.getCenter().getPanes()
       assert.equal(panes.length, 2)
       assert.equal(panes[0].getItems()[0].getTitle(), 'Telemetry Consent')
       assert.equal(panes[0].getItems()[1].getTitle(), 'Welcome')
@@ -34,13 +34,13 @@ describe('Welcome', () => {
 
   describe('when `core.telemetryConsent` is not `undecided`', () => {
     beforeEach(async () => {
-      atom.config.set('core.telemetryConsent', 'no')
+      soldat.config.set('core.telemetryConsent', 'no')
       await welcomePackage.activate()
     })
 
     describe('when activated for the first time', () =>
       it('shows the welcome panes', () => {
-        const panes = atom.workspace.getCenter().getPanes()
+        const panes = soldat.workspace.getCenter().getPanes()
         assert.equal(panes.length, 2)
         assert.equal(panes[0].getItems()[0].getTitle(), 'Welcome')
         assert.equal(panes[1].getItems()[0].getTitle(), 'Welcome Guide')
@@ -49,15 +49,15 @@ describe('Welcome', () => {
 
     describe('the welcome:show command', () => {
       it('shows the welcome buffer', async () => {
-        atom.workspace.getCenter().getPanes().map(pane => pane.destroy())
-        assert(!atom.workspace.getActivePaneItem())
+        soldat.workspace.getCenter().getPanes().map(pane => pane.destroy())
+        assert(!soldat.workspace.getActivePaneItem())
 
-        const workspaceElement = atom.views.getView(atom.workspace)
-        atom.commands.dispatch(workspaceElement, 'welcome:show')
+        const workspaceElement = soldat.views.getView(soldat.workspace)
+        soldat.commands.dispatch(workspaceElement, 'welcome:show')
 
-        await conditionPromise(() => atom.workspace.getActivePaneItem())
+        await conditionPromise(() => soldat.workspace.getActivePaneItem())
 
-        const panes = atom.workspace.getCenter().getPanes()
+        const panes = soldat.workspace.getCenter().getPanes()
         assert.equal(panes.length, 2)
         assert.equal(panes[0].getItems()[0].getTitle(), 'Welcome')
       })
@@ -66,7 +66,7 @@ describe('Welcome', () => {
     describe('deserializing the pane items', () => {
       describe('when GuideView is deserialized', () => {
         it('remembers open sections', () => {
-          const panes = atom.workspace.getCenter().getPanes()
+          const panes = soldat.workspace.getCenter().getPanes()
           const guideView = panes[1].getItems()[0]
 
           guideView.element.querySelector('details[data-section="snippets"]').setAttribute('open', 'open')
@@ -87,7 +87,7 @@ describe('Welcome', () => {
     describe('reporting events', () => {
       let panes, guideView, reportedEvents
       beforeEach(() => {
-        panes = atom.workspace.getCenter().getPanes()
+        panes = soldat.workspace.getCenter().getPanes()
         guideView = panes[1].getItems()[0]
         reportedEvents = []
 
